@@ -1,0 +1,15 @@
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+app.post("/webhook", (req, res) => {
+  console.log("Pagamento recebido:", req.body);
+  res.sendStatus(200);
+});
+
+app.get("/", (req, res) => {
+  res.send("Servidor rodando 🚀");
+});
+
+app.listen(3000, () => console.log("Rodando"));
