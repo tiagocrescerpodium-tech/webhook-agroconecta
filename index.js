@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // 🔑 COLE SEU ACCESS TOKEN AQUI
 const ACCESS_TOKEN = "TEST-437428606299351-041416-be77e2975f63212889d92e6afd6ed9b5-1356138240";
