@@ -36,7 +36,7 @@ app.post("/criar-pagamento", async (req, res) => {
     });
 
     const data = await response.json();
-
+console.log("RESPOSTA COMPLETA:", data);
     res.json({
       status: data.status,
       qr_code: data.point_of_interaction?.transaction_data?.qr_code,
