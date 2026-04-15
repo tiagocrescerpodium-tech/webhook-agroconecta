@@ -1,11 +1,20 @@
 {
-  "name": "webhook-agroconecta",
+  "name": "agroconecta",
   "version": "1.0.0",
+  "description": "Backend AgroConecta — integração com Mercado Pago",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "express": "^4.18.2"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
 }
