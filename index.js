@@ -5,9 +5,7 @@ const app = express();
 app.use(express.json());
 
 // 🔑 COLE SEU ACCESS TOKEN AQUI
-const ACCESS_TOKEN = "TEST-437428606299351-041416-be77e2975f63212889d92e6afd6ed9b5-1356138240
-";
-
+const ACCESS_TOKEN = "TEST-437428606299351-041416-be77e2975f63212889d92e6afd6ed9b5-1356138240";
 // 🔗 COLE SUA URL DO RAILWAY AQUI
 const WEBHOOK_URL = "https://webhook-agroconecta-production-bf29.up.railway.app/webhook";
 
