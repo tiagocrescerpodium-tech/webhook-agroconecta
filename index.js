@@ -5,9 +5,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 🔑 COLE SEU ACCESS TOKEN AQUI
+// 🔑 SEU ACCESS TOKEN
 const ACCESS_TOKEN = "TEST-437428606299351-041416-be77e2975f63212889d92e6afd6ed9b5-1356138240";
-// 🔗 COLE SUA URL DO RAILWAY AQUI
+
+// 🔗 SUA URL DO WEBHOOK
 const WEBHOOK_URL = "https://webhook-agroconecta-production-bf29.up.railway.app/webhook";
 
 // 🚀 ROTA TESTE
@@ -30,13 +31,26 @@ app.post("/criar-pagamento", async (req, res) => {
         payment_method_id: "pix",
         notification_url: WEBHOOK_URL,
         payer: {
-          email: "teste@email.com",
+          // ⚠️ IMPORTANTE: email de teste válido
+          email: "test_user_123456@testuser.com",
         },
       }),
     });
 
     const data = await response.json();
-console.log("RESPOSTA COMPLETA:", data);
+
+    // 🔍 DEBUG COMPLETO
+    console.log("RESPOSTA MERCADO PAGO:", data);
+
+    // ❌ Se deu erro na API
+    if (!response.ok) {
+      return res.status(400).json({
+        erro: "Erro ao criar pagamento",
+        detalhe: data,
+      });
+    }
+
+    // ✅ Retorno correto
     res.json({
       status: data.status,
       qr_code: data.point_of_interaction?.transaction_data?.qr_code,
@@ -44,12 +58,12 @@ console.log("RESPOSTA COMPLETA:", data);
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("ERRO GERAL:", error);
     res.status(500).json({ error: "Erro ao criar pagamento" });
   }
 });
 
-// 🔔 WEBHOOK (RECEBE CONFIRMAÇÃO DE PAGAMENTO)
+// 🔔 WEBHOOK
 app.post("/webhook", async (req, res) => {
   try {
     console.log("🔔 Notificação recebida:", req.body);
@@ -60,7 +74,7 @@ app.post("/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    // 🔎 CONSULTAR STATUS DO PAGAMENTO
+    // 🔎 CONSULTAR PAGAMENTO
     const response = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
       {
@@ -72,15 +86,10 @@ app.post("/webhook", async (req, res) => {
 
     const payment = await response.json();
 
-    console.log("💰 Status do pagamento:", payment.status);
+    console.log("💰 STATUS:", payment.status);
 
     if (payment.status === "approved") {
-      console.log("✅ PAGAMENTO APROVADO! Liberar produto.");
-
-      // 👉 AQUI você pode:
-      // salvar no banco
-      // liberar pedido
-      // enviar produto pro cliente
+      console.log("✅ PAGAMENTO APROVADO!");
     }
 
     res.sendStatus(200);
@@ -91,7 +100,7 @@ app.post("/webhook", async (req, res) => {
   }
 });
 
-// 🚀 INICIAR SERVIDOR
+// 🚀 SERVIDOR
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
